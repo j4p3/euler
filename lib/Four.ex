@@ -9,6 +9,7 @@ defmodule Four do
 
   @doc """
   Strategy: iterate backwards from 999 & check?
+  Optimizations: constrain iteration to a zone within n of the diagonal?
   """
   def run() do
     find_largest_palindrome({999, 999}, [])
