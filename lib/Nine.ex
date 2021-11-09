@@ -16,19 +16,10 @@ defmodule Nine do
   * double comprehension + filter with third term as difference
   """
   def run(sum) do
-    for a <- 1..sum,
-        b <- 1..sum,
+    for a <- 1..ceil(sum/2),
+        b <- a..sum-a,
         a * a + b * b == (sum - a - b) * (sum - a - b),
         into: %{},
         do: {a * b * (sum - a - b), {a, b, sum - a - b}}
   end
-
-  # defp search({a, b, c}, target, _cache) when a >= target && b >= target && c >= target
-  # defp search({a, b, c}, target, cache) do
-
-  # end
-
-  # def is_pythagorean_triplet(a, b, c) do
-  #   a * a + b * b == c * c
-  # end
 end
