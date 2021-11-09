@@ -13,7 +13,7 @@ defmodule Seven do
   def run(n) do
     max = maximum_nth_prime(n)
     mapset_containing_up_to(max)
-    |> find_primes({max, ceil(:math.sqrt(max))})
+    |> find_primes({max, floor(:math.sqrt(max))})
     |> Enum.at(n - 1)
   end
 
