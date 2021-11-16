@@ -3,24 +3,52 @@ defmodule Math do
   Functions for performing math operations
   """
 
+  @type factor_cache :: %{integer() => [integer()]}
+
   @doc """
   Get the smallest prime divisor of a number
   """
   @spec find_divisor(integer, integer) :: {integer, integer}
+  def find_divisor(number, divisor \\ 2)
+
   def find_divisor(number, divisor) when rem(number, divisor) == 0 do
     {div(number, divisor), divisor}
   end
+
   def find_divisor(number, divisor), do: find_divisor(number, divisor + 1)
 
   @doc """
   Find prime factors of a number
   """
-  @spec factorize(integer(), [integer()] | []) :: [integer()]
-  def factorize(number, factors \\ [])
-  def factorize(1, factors), do: factors
-  def factorize(number, factors) do
-    {result, divisor} = Math.find_divisor(number, 2)
-    factorize(result, [divisor | factors])
+  @spec prime_factors(integer(), [integer()] | []) :: [integer()]
+  def prime_factors(number, factors \\ [])
+  def prime_factors(1, factors), do: factors
+
+  def prime_factors(number, factors) do
+    {result, divisor} = find_divisor(number)
+    prime_factors(result, [divisor | factors])
+  end
+
+  @doc """
+  Find all factors of a number
+  """
+  @spec factors(integer()) :: [integer()]
+  def factors(number),
+    do: accumulate_factors(number, floor(:math.sqrt(number)), [])
+
+  @spec accumulate_factors(integer(), integer(), [integer()]) :: any
+  defp accumulate_factors(_number, 0, factors), do: factors
+
+  defp accumulate_factors(number, divisor, factors) do
+    accumulate_factors(number, divisor - 1, factors_for(number, divisor) ++ factors)
+  end
+
+  defp factors_for(number, divisor) do
+    if rem(number, divisor) == 0 do
+      [div(number, divisor), divisor]
+    else
+      []
+    end
   end
 
   @doc """
@@ -32,11 +60,13 @@ defmodule Math do
   end
 
   defp filter_nonprimes(number_set, max_tuple, number \\ 2)
+
   defp filter_nonprimes(number_set, {_max, max_sqrt}, number) when number > max_sqrt do
     number_set
     |> MapSet.to_list()
     |> Enum.sort()
   end
+
   defp filter_nonprimes(number_set, {max, max_sqrt}, number) do
     number_set =
       if MapSet.member?(number_set, number) do
@@ -50,6 +80,7 @@ defmodule Math do
 
   defp eliminate_products(number_set, max, {product, _increment}) when product > max,
     do: number_set
+
   defp eliminate_products(number_set, max, {product, increment}) do
     MapSet.delete(number_set, product)
     |> eliminate_products(max, {product + increment, increment})

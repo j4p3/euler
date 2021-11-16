@@ -16,5 +16,5 @@ defmodule Three do
     largest_factor(input)
   end
 
-  def largest_factor(input), do: Math.factorize(input) |> List.first()
+  def largest_factor(input), do: Math.prime_factors(input) |> List.first()
 end
