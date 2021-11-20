@@ -85,4 +85,23 @@ defmodule Math do
     MapSet.delete(number_set, product)
     |> eliminate_products(max, {product + increment, increment})
   end
+
+  @doc """
+  Factorial of n.
+  """
+  @spec factorial(integer) :: integer
+  def factorial(n) do
+    Enum.reduce(1..n, 1, fn i, acc -> acc * i end)
+  end
+
+  @doc """
+  Combinations of k decisions over n moves.
+  """
+  @spec combination(integer, integer) :: integer
+  def combination(n, k) do
+    div(
+      Enum.reduce((n - k + 1)..n, 1, fn i, acc -> acc * i end),
+      factorial(k)
+    )
+  end
 end
