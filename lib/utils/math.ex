@@ -104,4 +104,15 @@ defmodule Math do
       factorial(k)
     )
   end
+
+  @doc """
+  Sum of the base-10 digits of an integer.
+  """
+  @spec sum_digits(integer) :: integer()
+  def sum_digits(n) do
+    n
+    |> Integer.to_string()
+    |> String.codepoints()
+    |> Enum.reduce(0, fn digit, acc -> acc + String.to_integer(digit) end)
+  end
 end
