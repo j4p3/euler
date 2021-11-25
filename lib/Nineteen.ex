@@ -59,18 +59,20 @@ defmodule Nineteen do
   def count_month({month, days_in_month}, {count, year, day}) do
     # IO.puts("#{month} 1: #{day_of_week?(day)}")
 
-    {count + maybe_increment(day), year, day + days_in_month + leap_increment(year, month)}
+    {count + increment_sunday(day), year, day + days_in_month + leap_increment(year, month)}
   end
+
+  # stupid gotcha in problem description, given 1900 but counting from 1901
+  defp increment_sunday(day) when day < 358, do: 0
+  defp increment_sunday(day), do: if(is_sunday?(day), do: 1, else: 0)
+
+  defp is_sunday?(day), do: rem(day, 7) == 0
 
   defp leap_increment(year, month), do: if(month == :feb && is_leap_year?(year), do: 1, else: 0)
 
   defp is_leap_year?(year) do
     rem(year, 4) == 0 && (not (rem(year, 100) == 0) || rem(year, 400) == 0)
   end
-
-  # stupid gotcha in problem description, given 1900 but counting from 1901
-  defp maybe_increment(day) when day < 358, do: 0
-  defp maybe_increment(day), do: if(is_sunday?(day), do: 1, else: 0)
 
   # defp day_of_week?(day) do
   #   %{
@@ -84,6 +86,4 @@ defmodule Nineteen do
   #   }
   #   |> Map.get(rem(day, 7))
   # end
-
-  defp is_sunday?(day), do: rem(day, 7) == 0
 end
