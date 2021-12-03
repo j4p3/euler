@@ -24,3 +24,5 @@ euler-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+/assets/*

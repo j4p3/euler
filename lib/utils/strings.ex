@@ -4,13 +4,24 @@ defmodule Strings do
   """
 
   @doc """
-  Convert a string of integers to a list of individual integers
+  Convert a string of integer characters ("1", "45") to a list of individual integers
   """
   @spec to_integer_list(String.t()) :: [integer()]
   def to_integer_list(input_string) do
     input_string
     |> String.codepoints()
     |> Enum.map(fn i -> String.to_integer(i) end)
+  end
+
+  @doc """
+  Sum the alphabetical position of letters in a string
+  """
+  @spec alphabetical_value(String.t()) :: integer()
+  def alphabetical_value(input_string) do
+    input_string
+    |> String.downcase()
+    |> String.to_charlist()
+    |> Enum.reduce(0, fn i, acc -> acc + i - 96 end)
   end
 
   @doc """
